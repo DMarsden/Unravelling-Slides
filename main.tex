@@ -1,0 +1,324 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+
+\title{A talk that will soon unravel}
+\author{Dan Marsden}
+\date{August 2020}
+
+\usepackage{amsmath, amsthm, amsfonts, amssymb, stmaryrd}
+
+\usepackage{tikz}
+
+\newcommand{\ie}{\textit{i.e.}~}
+\newcommand{\eg}{e.g.~}
+\newcommand{\Fraisse}{Fra\"{i}ss\'{e}}
+\newcommand{\set}{\mathsf{set}}
+\newcommand{\GS}{S}
+\newcommand{\As}{\mathcal{A}}
+\newcommand{\Aso}{(\As, a_0)}
+\newcommand{\Bs}{\mathcal{B}}
+\newcommand{\Bso}{(\Bs, b_0)}
+\newcommand{\Rs}{\mathcal{R}}
+\newcommand{\Tr}{\mathsf{Tr}}
+\newcommand{\preord}{\preceq}
+\newcommand{\preford}{\sqsubseteq}
+\newcommand{\op}{\mathsf{op}}
+\newcommand{\Gd}{\mathbb{G}}
+\newcommand{\Gk}{\mathbb{G}_{k}}
+\newcommand{\Ek}{\mathbb{E}_{k}}
+\newcommand{\Pk}{\mathbb{P}_{k}}
+\newcommand{\Pd}{\mathbb{T}}
+\newcommand{\IFF}{\Longleftrightarrow}
+\newcommand{\rarr}{\rightarrow}
+\newcommand{\id}{\mathsf{id}}
+\newcommand{\sg}{\sigma}
+\newcommand{\va}{\vec{a}}
+\newcommand{\vb}{\vec{b}}
+\newcommand{\vx}{\vec{x}}
+\newcommand{\vy}{\vec{y}}
+\newcommand{\vz}{\vec{z}}
+\newcommand{\RA}{R^{\As}}
+\newcommand{\RGA}{R^{\GG \As}}
+\newcommand{\RB}{R^{\Bs}}
+\newcommand{\RAB}{R^{\As \times \Bs}}
+\newcommand{\ve}{\varepsilon}
+\newcommand{\vempty}{\varnothing}
+\newcommand{\vphi}{\varphi}
+\newcommand{\gsim}{\preceq^{\gd}}
+\newcommand{\gsimk}{\preceq^{\gd}_{k}}
+\newcommand{\gbsim}{\sim^{\gd}}
+\newcommand{\gbsimk}{\sim^{\gd}_{k}}
+\newcommand{\vsa}{\vspace{.1in}}
+\newcommand{\RS}{\mathcal{R}(\sg)}
+\newcommand{\RSI}{\mathcal{R}(\sg +I)}
+\newcommand{\RSIe}{\mathcal{R}(\sg +I^{=})}
+\newcommand{\pref}{\sqsubseteq}
+\newcommand{\upset}{{\uparrow}}
+\newcommand{\downset}{{\downarrow}}
+\newcommand{\covers}{\prec}
+\newcommand{\IMP}{\; \Rightarrow \;}
+\newcommand{\AND}{\; \wedge \;}
+\newcommand{\Nat}{\mathbb{N}}
+\newcommand{\Ss}{\mathscr{S}}
+\newcommand{\incarrow}{\hookrightarrow}
+\newcommand{\IGA}{I^{\Gd \As}}
+\newcommand{\IGAB}{I^{\Gd (\As \times \Bs)}}
+\newcommand{\RGAB}{R^{\Gd (\As \times \Bs)}}
+\newcommand{\CS}{\mathsf{Struct}(\sg)}
+\newcommand{\clique}{\mathsf{clique}}
+\newcommand{\gd}{\mathfrak{g}}
+\newcommand{\Gg}{\mathbb{G}^{\gd}}
+\newcommand{\Gkg}{\mathbb{G}_{k}^{\gd}}
+\newcommand{\GG}{\mathbb{G}}
+\newcommand{\lb}{\llparenthesis}
+\newcommand{\rb}{\rrparenthesis}
+\newcommand{\epsA}{\ve_{\As}}
+\newcommand{\dg}{\dagger}
+\newcommand{\lt}{\langle}
+\newcommand{\rt}{\rangle}
+\newcommand{\gp}{\gamma^{+}}
+\newcommand{\Guarded}{\mathsf{Guarded}}
+\newcommand{\EMG}{\CS^{\GG}}
+\newcommand{\EMGk}{\CS^{\Gk}}
+\newcommand{\lrarr}{\leftrightarrow}
+
+%Dan stuff
+\newcommand{\hgraph}{\mathsf{HGraph}}
+\newcommand{\hver}[1]{V_{#1}}
+\newcommand{\hedg}[1]{E_{#1}}
+\newcommand{\hyp}[1]{(\hver{#1},\hedg{#1})}
+\newcommand{\HH}{\mathbb{H}}
+\newcommand{\Hk}{\HH_{k}}
+\newcommand{\until}{\mathbin{\mathbf{until}}}
+
+\newcommand{\M}{\mathbb{M}}
+\newcommand{\Mk}{\M_{k}}
+\newcommand{\Mp}{\mathbb{M}^{\circlearrowright}}
+\newcommand{\Mpk}{\Mp_{k}}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Nk}{\N_{k}}
+
+\newcommand{\A}{\mathbb{A}}
+\newcommand{\Ak}{\A_{k}}
+
+\newcommand{\aplayn}[1]{[a_0 \rightarrow \ldots \rightarrow a_{#1}]}
+\newcommand{\aplay}{\aplayn{n}}
+
+\newtheorem{proposition}{Proposition}
+
+\begin{document}
+
+\begin{frame}
+\maketitle
+\end{frame}
+
+\begin{frame}{The Modal Bisimulation Game}
+    We consider pointed Kripke structure~$(\As, a_0)$:
+    \begin{equation*}
+        \begin{tikzpicture}
+        \path node(a0) {$a_0$} +(-1,-1) node (a1) {$a_1$} +(1,-1) node(a2) {$a_2$};
+        \path[->] 
+        (a0) edge[bend right] (a1)
+        (a1) edge[bend right] (a0)
+        (a0) edge (a2);
+        \end{tikzpicture}
+    \end{equation*}
+    and build a structure out of valid spoiler plays, for example:
+    \begin{equation*}
+        [a_0 \rightarrow a_1 \rightarrow a_0 \rightarrow a_2]
+    \end{equation*}
+\end{frame}
+
+\begin{frame}{The Game Construction Yields an Unravelling}
+    We impose a Kripke structure on the plays to force morphisms to correspond to valid Duplicator responses:
+    \begin{equation*}
+        \begin{tikzpicture}
+        \path 
+        node (a) {$[a_0]$} +(-1,-1) 
+        node (b) {$[a_0 \rightarrow a_1]$} ++(1,-1)
+        node (c) {$[a_0 \rightarrow a_2]$} (b) ++(0,-1)
+        node (a') {$[a_0 \rightarrow a_1 \rightarrow a_0]$} ++(0,-1)
+        node (dots) {$\ldots$};
+        \path[->]
+        (a) edge (b)
+        (a) edge (c)
+        (b) edge (a')
+        (a') edge (dots);
+        \end{tikzpicture}
+    \end{equation*}
+\end{frame}
+
+\begin{frame}{The Comonad~$\M$}
+    This plan yields a comonad $\M$ with:
+    \begin{description}
+    \item[Object mapping:]~$(\As,a_0)$ is mapped to a structure with universe~$a_0$ rooted plays and edges:
+    \begin{equation*}
+        \aplay \rightarrow [a0 \rightarrow \ldots \rightarrow a_n \rightarrow a_{n + 1}]
+    \end{equation*}
+    \item[Counit:] The counit is the tail function:
+    \begin{equation*}
+        \epsilon\aplay := a_n
+    \end{equation*}
+    \item[Kleisli coextension:] For~$f : \M (\As,a_0) \rightarrow (\Bs, b_0)$, we define~$f^*$ ``prefix-wise'' as follows:
+    \begin{align*}
+        &f^*\aplay :=\\ 
+        &[f[a_0] \rightarrow \ldots \rightarrow f\aplay]
+    \end{align*}
+    \end{description}
+\end{frame}
+
+\begin{frame}{Polyadic Variant}
+Multiple transition relations can be handled in a straightforward way by labelling:
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{equation*}
+    \begin{tikzpicture}
+        \path node(a0) {$a_0$} +(-1,-1) node (a1) {$a_1$} +(1,-1) node(a2) {$a_2$};
+        \path[->] 
+        (a0) edge[bend right] node[midway, above left]{$\alpha$} (a1)
+        (a1) edge[bend right] node[midway, below right]{$\beta$} (a0)
+        (a0) edge node[midway, above right]{$\gamma$} (a2);
+        \end{tikzpicture}
+    \end{equation*}
+\end{column}
+\begin{column}{0.5\textwidth}
+\begin{equation*}
+    \begin{tikzpicture}
+    \path 
+    node (a) {$[a_0]$} +(-1,-1) 
+    node (b) {$[a_0 \xrightarrow{\alpha} a_1]$} ++(1,-1)
+    node (c) {$[a_0 \xrightarrow{\gamma} a_2]$} (b) ++(0,-1)
+    node (a') {$[a_0 \xrightarrow{\alpha} a_1 \xrightarrow{\beta} a_0]$} ++(0,-1)
+    node (dots) {$\ldots$};
+    \path[->]
+    (a) edge node[midway, above left]{$\alpha$} (b)
+    (a) edge node[midway, above right]{$\gamma$} (c)
+    (b) edge node[midway, left]{$\beta$} (a')
+    (a') edge (dots);
+    \end{tikzpicture}
+\end{equation*}
+\end{column}
+\end{columns}
+Notice that~$[a_0]$ is bisimilar to~$a_0$, and the construction yields a tree model. We can also grade by bounding the trees, yielding comonads~$\Mk$.
+\end{frame}
+
+\begin{frame}{There are other choices}
+We can ignore the labels on paths when constructing our universe, for example:
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{equation*}
+    \begin{tikzpicture}
+    \path node(a0) {$a_0$} +(-1,-1) node (a1) {$a_1$} +(1,-1) node(a2) {$a_2$};
+    \path[->] 
+    (a0) edge[bend right] node[midway, above left]{$\alpha, \beta$} (a1)
+    (a1) edge[bend right] node[midway, below right]{$\beta$} (a0)
+    (a0) edge node[midway, above right]{$\gamma$} (a2);
+    \end{tikzpicture}
+\end{equation*}
+\end{column}
+\begin{column}{0.5\textwidth}
+\begin{equation*}
+    \begin{tikzpicture}
+    \path 
+    node (a) {$[a_0]$} +(-1,-1) 
+    node (b) {$[a_0 \rightarrow a_1]$} ++(1,-1)
+    node (c) {$[a_0 \rightarrow a_2]$} (b) ++(0,-1)
+    node (a') {$[a_0 \rightarrow a_1 \rightarrow a_0]$} ++(0,-1)
+    node (dots) {$\ldots$};
+    \path[->]
+    (a) edge node[midway, above left]{$\alpha, \beta$} (b)
+    (a) edge node[midway, above right]{$\gamma$} (c)
+    (b) edge node[midway, left]{$\beta$} (a')
+    (a') edge (dots);
+    \end{tikzpicture}
+\end{equation*}
+\end{column}
+\end{columns}
+We still get a tree unravelling, but with the potential for parallel edges in the~$\sg$-structure.
+\end{frame}
+
+\begin{frame}{Another Comonad}
+
+    \begin{proposition}
+    Unlabelled directed paths yield a tree unravelling comonad.
+    \end{proposition}
+
+    \begin{block}{Comparison}
+    Both constructions yield bisimilar tree unravellings:
+    \begin{itemize}
+        \item The original game motivated construction yields disjoint edge relations.
+        \item The new construction will be trivial on tree models with parallel edges.
+    \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Backwards Modalities}
+    If we consider backwards modalities, we must move to two-way bisimulation. The corresponding game based construction yields for two rounds:
+    \begin{columns}
+    \begin{column}{0.3\textwidth}
+    \begin{equation*}
+    \begin{tikzpicture}
+        \path node(a0) {$a_0$} +(-1,-1) node (a1) {$a_1$} +(1,-1) node(a2) {$a_2$};
+        \path[->] 
+        (a0) edge[bend right] node[midway, above left]{$\alpha$} (a1)
+        (a1) edge[bend right] node[midway, below right]{$\beta$} (a0)
+        (a0) edge node[midway, above right]{$\gamma$} (a2);
+        \end{tikzpicture}
+    \end{equation*}   
+    \end{column}
+    \begin{column}{0.7\textwidth}
+    \begin{equation*}
+    \begin{tikzpicture}
+    \path 
+    node (a) {$[a_0]$} +(-1,-1)
+    node (b) {$[a_0 \xrightarrow {\alpha} a_1]$} +(1,-1)
+    node (c) {$[a_0 \xrightarrow{\beta} a_2]$} +(0,1)
+    node (d) {$[a_0 \xleftarrow{\beta} a_1]$} (b) + (-1.5,-1)
+    node (e) {$[a_0 \xrightarrow{\alpha} a_1 \xleftarrow{\alpha} a_0]$} +(1.5,-1)
+    node (f) {$[a_0 \xrightarrow{\alpha} a_1 \xrightarrow{\beta} a_0]$} (d) +(-1.5,1)
+    node (g) {$[a_0 \xleftarrow{\beta} a_1 \xleftarrow{\alpha} a_0]$} +(1.5,1)
+    node (h) {$[a_0 \xleftarrow{\beta} a_1 \xrightarrow{\beta} a_0]$};
+    \path[->]
+    (a) edge node[midway, above left]{$\alpha$} (b)
+    (a) edge node[midway, above right]{$\gamma$} (c)
+    (d) edge node[midway, right]{$\beta$} (a)
+    (e) edge node[midway, above left]{$\alpha$} (b)
+    (b) edge node[midway, above right]{$\beta$} (f)
+    (g) edge node[midway, below left]{$\alpha$} (d)
+    (d) edge node[midway, below right]{$\beta$} (h);
+    \end{tikzpicture}  
+    \end{equation*}
+    \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Two variants}
+    We have two degrees of freedom:
+    \begin{enumerate}
+        \item Removing edge orientation
+        \item Removing edge labels
+    \end{enumerate}
+    \begin{proposition}
+    Each of the four possible variants yields a comonad on pointed Kripke structures yielding two-way bisimilar tree unravellings.
+    \end{proposition}
+    \begin{block}{Comparison}
+    We note that:
+    \begin{itemize}
+        \item Edge labels produce disjoint transition relations
+        \item Oriented edges produce anti-symmetric (and irreflexive) edge relations
+    \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}{A Subtlety}
+Otto suggests a tree unravelling in terms of undirected paths, \emph{but} he discards ``trivial'' paths analogous to:
+\begin{equation*}
+    [a \rightarrow b \leftarrow a]
+\end{equation*}
+This prevents acyclic structures having infinite unravellings. (I believe this is the motivation).
+\pause
+Possibly a comonad?
+\end{frame}
+
+\end{document}

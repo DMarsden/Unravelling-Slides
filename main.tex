@@ -235,7 +235,7 @@ We can ignore the labels on paths when constructing our universe, for example:
 \end{equation*}
 \end{column}
 \end{columns}
-We still get a tree unravelling, but with the potential for parallel edges in the~$\sg$-structure.
+We still get a tree unravelling, but with the potential for parallel edges in the Kripke structure.
 \end{frame}
 
 \begin{frame}{Another Comonad}
@@ -316,9 +316,109 @@ Otto suggests a tree unravelling in terms of undirected paths, \emph{but} he dis
 \begin{equation*}
     [a \rightarrow b \leftarrow a]
 \end{equation*}
-This prevents acyclic structures having infinite unravellings. (I believe this is the motivation).
+This prevents acyclic structures having infinite unravellings. (Is this the original motivation?).
 \pause
 Possibly a comonad?
+\end{frame}
+
+\begin{frame}{Unravelling a bit}
+If we want to remain within finite structures, we cannot have fully bisimilar tree unravellings. Instead, we can only partially unravel:
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{equation*}
+        \begin{tikzpicture}
+        \path node(a0) {$a_0$} +(-1,-1) node (a1) {$a_1$} +(1,-1) node(a2) {$a_2$};
+        \path[->] 
+        (a0) edge[bend right] (a1)
+        (a1) edge[bend right] (a0)
+        (a0) edge (a2);
+        \end{tikzpicture}
+    \end{equation*}
+\end{column}
+\begin{column}{0.5\textwidth}
+\begin{equation*}
+        \begin{tikzpicture}
+        \path 
+        node (a) {$[a_0]$} +(-1,-1) 
+        node (b) {$[a_0 \rightarrow a_1]$} ++(1,-1)
+        node (c) {$[a_0 \rightarrow a_2]$} (b) ++(0,-1)
+        node (a') {$[a_0 \rightarrow a_1 \rightarrow a_0]$} ++(0,-1)
+        node (a'') {$(l, a_0)$} +(-1,-1)
+        node (b'') {$(l, a_1)$} +(1,-1)
+        node (c'') {$(l, a_2)$};
+        \path[->]
+        (a) edge (b)
+        (a) edge (c)
+        (b) edge (a')
+        (a') edge[bend right] (b'')
+        (a') edge[bend left] (c'')
+        (a'') edge[bend right] (b'')
+        (b'') edge[bend right] (a'')
+        (a'') edge (c'');
+        \end{tikzpicture}
+    \end{equation*}
+    Where~$l = [a_0 \rightarrow a_1 \rightarrow a_0]$
+\end{column}
+\end{columns}    
+    
+\end{frame}
+
+\begin{frame}{Comonads again}
+    \begin{proposition}
+    Partial unravelling to depth~$k$ yields a comonad on pointed Kripke structures.
+    \end{proposition}
+    \begin{block}{Remarks}
+    We can consider variations for one-way / two-way and different unravelling constructions. {\bf Details to be fully checked!}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Acyclicity}
+\begin{block}{Bounded acyclicity}
+We observe that:
+\begin{itemize}
+\item Full unravelling is bisimilar, completely acyclic, but out of reach for finite models.
+\item Bounded unravelling is finite, but only preserves a limited depth of bisimilarity
+\item The models produced by the partial unravelling are acyclic locally around the point~$a_0$
+\end{itemize}
+How can we achieve some acyclicity more uniformly within bisimilar finite models?
+\end{block}
+\end{frame}
+
+\begin{frame}{Acyclicity Construction}
+\framesubtitle{Step 1}
+    Our example system:
+    \begin{equation*}
+        \begin{tikzpicture}
+        \path node(a0) {$a_0$} +(-1,-1) node (a1) {$a_1$} +(1,-1) node(a2) {$a_2$};
+        \path[->] 
+        (a0) edge[bend right] (a1)
+        (a1) edge[bend right] (a0)
+        (a0) edge (a2);
+        \end{tikzpicture}
+    \end{equation*}
+    Unravel a bit everywhere:
+    \begin{equation*}
+        \begin{tikzpicture}
+        \path 
+        node (a) {$[a_0]$} +(-1,-1) 
+        node (b) {$[a_0 \rightarrow a_1]$} ++(1,-1)
+        node (c) {$[a_0 \rightarrow a_2]$} (b) ++(0,-1)
+        node (a') {$[a_0 \rightarrow a_1 \rightarrow a_0]$} (a) ++(-6,0)
+        node (b'') {$[a_1]$} ++(0,-1)
+        node (a'') {$[a_1 \rightarrow a_0]$} +(-1.5,-1)
+        node (b''') {$[a_1 \rightarrow a_0 \rightarrow a_1]$} +(1.5,-1)
+        node (c'') {$[a_1 \rightarrow a_0 \rightarrow a_2]$} (a) ++(2,0)
+        node (c''') {$[a_2]$};
+        
+        \path[->]
+        (a) edge (b)
+        (a) edge (c)
+        (b) edge (a')
+        (b'') edge (a'')
+        (a'') edge (b''')
+        (a'') edge (c'');
+        \end{tikzpicture}
+    \end{equation*}
 \end{frame}
 
 \end{document}

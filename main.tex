@@ -1,13 +1,16 @@
 \documentclass{beamer}
+\setbeamertemplate{navigation symbols}{}
 \usepackage[utf8]{inputenc}
+\usepackage[style=verbose]{biblatex}
 
-\title{A talk that will soon unravel}
+\title{A talk that will soon unravel\\{\small But it will try not to repeat itself}}
 \author{Dan Marsden}
 \date{August 2020}
 
 \usepackage{amsmath, amsthm, amsfonts, amssymb, stmaryrd}
 
 \usepackage{tikz}
+\usepackage{tikz-cd}
 
 \newcommand{\ie}{\textit{i.e.}~}
 \newcommand{\eg}{e.g.~}
@@ -107,13 +110,39 @@
 
 \newtheorem{proposition}{Proposition}
 
+\bibliography{main}
+
 \begin{document}
 
 \begin{frame}
 \maketitle
 \end{frame}
 
-\begin{frame}{The Modal Bisimulation Game}
+\begin{frame}[fragile]{Motivation}
+    Otto and Dawar~\footcite{Otto2004},\footcite{DawarOtto2009} prove various van Benthem / Rosen theorems via upgradings:
+    \begin{columns}
+    \begin{column}{0.3\textwidth}
+    \begin{equation*}
+    \begin{tikzcd}[arrows=-]
+    \As \rar["\sim_k"] \dar["\sim"] & \Bs \dar["\sim"] \\
+    \hat{\As} \rar["\dot{\equiv}"] & \hat{\Bs}
+    \end{tikzcd}
+    \end{equation*}
+    \end{column}
+    \begin{column}{0.7\textwidth}
+    \begin{description}
+    \item[$\sim$] Bisimilarity
+    \item[$\sim_k$] A finite approximation to bisimilarity
+    \item[$\dot{\equiv}$] A stronger equivalence relation
+    \end{description}
+    \end{column}
+    \end{columns}
+    \begin{block}{Simple Observations}
+    To show and use these lifting theorems we need to capture various notions of bisimilarity, locality and related model construction, and their interaction.
+    \end{block}
+\end{frame}
+
+\begin{frame}{The Modal (Bi)simulation Game}
     We consider pointed Kripke structure~$(\As, a_0)$:
     \begin{equation*}
         \begin{tikzpicture}
@@ -124,10 +153,14 @@
         (a0) edge (a2);
         \end{tikzpicture}
     \end{equation*}
-    and build a structure out of valid spoiler plays, for example:
+    \pause
+    \begin{block}{Winning Strategies as Morphisms}
+    We would like to build a structure~$\M \As$ such that morphisms~$\M \As \rightarrow \Bs$ correspond to winning strategies for the simulation game from~$\As$ to~$\Bs$.
+    To do so, we build a structure out of valid spoiler plays, for example:
     \begin{equation*}
         [a_0 \rightarrow a_1 \rightarrow a_0 \rightarrow a_2]
     \end{equation*}
+    \end{block}
 \end{frame}
 
 \begin{frame}{The Game Construction Yields an Unravelling}
@@ -151,7 +184,7 @@
 
 \begin{frame}{The Comonad~$\M$}
     This plan yields a comonad $\M$ with:
-    \begin{description}
+    \begin{description}[Kleisli co-extension:]
     \item[Object mapping:]~$(\As,a_0)$ is mapped to a structure with universe~$a_0$ rooted plays and edges:
     \begin{equation*}
         \aplay \rightarrow [a0 \rightarrow \ldots \rightarrow a_n \rightarrow a_{n + 1}]
@@ -160,7 +193,7 @@
     \begin{equation*}
         \epsilon\aplay := a_n
     \end{equation*}
-    \item[Kleisli coextension:] For~$f : \M (\As,a_0) \rightarrow (\Bs, b_0)$, we define~$f^*$ ``prefix-wise'' as follows:
+    \item[Kleisli co-extension:] For~$f : \M (\As,a_0) \rightarrow (\Bs, b_0)$, we define~$f^*$ ``prefix-wise'' as follows:
     \begin{align*}
         &f^*\aplay :=\\ 
         &[f[a_0] \rightarrow \ldots \rightarrow f\aplay]
@@ -200,10 +233,13 @@ Multiple transition relations can be handled in a straightforward way by labelli
 \end{equation*}
 \end{column}
 \end{columns}
-Notice that~$[a_0]$ is bisimilar to~$a_0$, and the construction yields a tree model. We can also grade by bounding the trees, yielding comonads~$\Mk$.
+\pause
+\begin{block}{Tree Unravelling}
+$[a_0]$ is bisimilar to~$a_0$, and the construction yields a tree model. We can also grade by bounding the trees, yielding comonads~$\Mk$.
+\end{block}
 \end{frame}
 
-\begin{frame}{There are other choices}
+\begin{frame}{That is not the only choice}
 We can ignore the labels on paths when constructing our universe, for example:
 \begin{columns}
 \begin{column}{0.5\textwidth}
@@ -294,7 +330,8 @@ We still get a tree unravelling, but with the potential for parallel edges in th
 \end{frame}
 
 \begin{frame}{Two variants}
-    We have two degrees of freedom:
+    For sequences such as~$[a_0 \xrightarrow{\alpha} a_1 \xleftarrow{\beta} a_2]$,
+    we two potential modifications:
     \begin{enumerate}
         \item Removing edge orientation
         \item Removing edge labels
@@ -365,7 +402,7 @@ If we want to remain within finite structures, we cannot have fully bisimilar tr
 
 \begin{frame}{Comonads again}
     \begin{proposition}
-    Partial unravelling to depth~$k$ yields a comonad on pointed Kripke structures.
+    Partial unravelling to depth~$k$ yields a comonad on (finite) pointed Kripke structures.
     \end{proposition}
     \begin{block}{Remarks}
     We can consider variations for one-way / two-way and different unravelling constructions. {\bf Details to be fully checked!}
@@ -384,9 +421,8 @@ How can we achieve some acyclicity more uniformly within bisimilar finite models
 \end{block}
 \end{frame}
 
-\begin{frame}{Acyclicity Construction}
-\framesubtitle{Step 1}
-    Our example system:
+\begin{frame}{Acyclicity Construction in Two Steps}
+    Our example (no longer pointed) system:
     \begin{equation*}
         \begin{tikzpicture}
         \path node(a0) {$a_0$} +(-1,-1) node (a1) {$a_1$} +(1,-1) node(a2) {$a_2$};
@@ -396,18 +432,19 @@ How can we achieve some acyclicity more uniformly within bisimilar finite models
         (a0) edge (a2);
         \end{tikzpicture}
     \end{equation*}
-    Unravel a bit everywhere:
+    Construction:
     \begin{equation*}
         \begin{tikzpicture}
+        \uncover{1-}{
         \path 
-        node (a) {$[a_0]$} +(-1,-1) 
-        node (b) {$[a_0 \rightarrow a_1]$} ++(1,-1)
-        node (c) {$[a_0 \rightarrow a_2]$} (b) ++(0,-1)
-        node (a') {$[a_0 \rightarrow a_1 \rightarrow a_0]$} (a) ++(-6,0)
+        node (a) {$[a_0]$} +(-1,1) 
+        node (b) {$[a_0 \rightarrow a_1]$} ++(1,1)
+        node (c) {$[a_0 \rightarrow a_2]$} (b) ++(0,1)
+        node (a') {$[a_0 \rightarrow a_1 \rightarrow a_0]$} (a) ++(-6,2)
         node (b'') {$[a_1]$} ++(0,-1)
-        node (a'') {$[a_1 \rightarrow a_0]$} +(-1.5,-1)
-        node (b''') {$[a_1 \rightarrow a_0 \rightarrow a_1]$} +(1.5,-1)
-        node (c'') {$[a_1 \rightarrow a_0 \rightarrow a_2]$} (a) ++(2,0)
+        node (a'') {$[a_1 \rightarrow a_0]$} +(1.5,-1)
+        node (b''') {$[a_1 \rightarrow a_0 \rightarrow a_1]$} +(-1.5,-1)
+        node (c'') {$[a_1 \rightarrow a_0 \rightarrow a_2]$} (a) ++(2,2)
         node (c''') {$[a_2]$};
         
         \path[->]
@@ -417,8 +454,37 @@ How can we achieve some acyclicity more uniformly within bisimilar finite models
         (b'') edge (a'')
         (a'') edge (b''')
         (a'') edge (c'');
+        }
+        
+        \uncover<2>{
+        \path[->, red]
+        (a') edge (b'')
+        (a') edge (c''')
+        (b''') edge (a);
+        }
         \end{tikzpicture}
     \end{equation*}
+\end{frame}
+
+\begin{frame}{Yet Another Comonad}
+    \begin{proposition}
+    The bounded unravelling acyclicity construction yields a comonad on (finite) Kripke structures.
+    \end{proposition}
+    \begin{block}{Remarks}
+    Lots of variants based on the previous observations. {\bf Lots of details to check!}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Further steps}
+    \begin{itemize}
+        \item There is a local neighbourhood comonad on pointed structures, relate this to the other constructions.
+        \item Explain the relationship between the different variants. Here there's a potential ``disjointing'' comonad, can this be used to construct some variants in a uniform way? Is there a ``anti-symmetry'' comonad that could be used similarly?
+        \item Note there seem to be some monads about as well - filtration, ultrafilter construction, ultraproducts (see for example Leinster)...
+        \pause
+        \item Get back to what I'm supposed to be doing - develop van Benthem - Rosen style arguments in our framework.
+        \pause
+        \item Get back to what I'm really supposed to be doing - understand acyclicity and its relationship to Otto's amalgamation constructions in our setting.
+    \end{itemize}
 \end{frame}
 
 \end{document}
